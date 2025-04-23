@@ -31,10 +31,8 @@ Route::middleware('auth')->group(function () {
 
     // admin routes
    Route::get('/dashboard',[AdminController::class,'dashboard'])->name('dashboard');
-
-
-//    Route::post('/auctions/create',[AuctionController::class,'store'])->name('auctions.create');
-   Route::post('/dashboard',[AuctionController::class,'store'])->name('auctions.create');
+   Route::get('/auctions',[AdminController::class,'auction'])->name('auction');
+   Route::post('/auctions',[AuctionController::class,'store'])->name('auctions.create');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
-import { computed } from "vue";
 
-const props = defineProps({
+defineProps({
     currentRoute: {
         type: String,
         default: "/auctions",
@@ -11,11 +10,6 @@ const props = defineProps({
         type: Object,
         required: true,
     },
-});
-
-// Helper to check if a route is active
-const isActive = computed(() => (route: string) => {
-    return props.currentRoute === route;
 });
 </script>
 
@@ -44,11 +38,12 @@ const isActive = computed(() => (route: string) => {
 
             <!-- Navigation Links -->
             <nav class="space-y-2 flex-1">
+                <!-- Dashboard -->
                 <Link
-                    href="#"
+                    href="/dashboard"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        isActive('/dashboard')
+                        $page.component === 'Admin/Dashboard'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -57,7 +52,7 @@ const isActive = computed(() => (route: string) => {
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            isActive('/dashboard')
+                            $page.component === 'Admin/Dashboard'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -69,20 +64,23 @@ const isActive = computed(() => (route: string) => {
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
-                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                            d="M3 3h6v6H3V3zm0 12h6v6H3v-6zm12-12h6v6h-6V3zm0 12h6v6h-6v-6z"
                         />
                     </svg>
+
                     <span class="font-medium"> Dashboard</span>
                     <span
-                        v-if="isActive('/auctions')"
+                        v-if="$page.component === '/dashboard'"
                         class="ml-auto w-1 h-8 bg-blue-600 rounded-full"
                     ></span>
                 </Link>
+
+                <!-- Auction -->
                 <Link
                     href="/auctions"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        isActive('/auctions')
+                        $page.component === 'Admin/Auction/Index'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -91,7 +89,7 @@ const isActive = computed(() => (route: string) => {
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            isActive('/auctions')
+                            $page.component === '/dashboard'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -108,7 +106,7 @@ const isActive = computed(() => (route: string) => {
                     </svg>
                     <span class="font-medium"> Auctions</span>
                     <span
-                        v-if="isActive('/auctions')"
+                        v-if="$page.component === '/dashboard'"
                         class="ml-auto w-1 h-8 bg-blue-600 rounded-full"
                     ></span>
                 </Link>
@@ -117,7 +115,7 @@ const isActive = computed(() => (route: string) => {
                     href="#"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        isActive('/my-bids')
+                        $page.component === '/dashboard'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -126,7 +124,7 @@ const isActive = computed(() => (route: string) => {
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            isActive('/my-bids')
+                            $page.component === '/dashboard'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -152,7 +150,7 @@ const isActive = computed(() => (route: string) => {
                     href="#"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        isActive('/users')
+                        $page.component === '/dashboard'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -161,7 +159,7 @@ const isActive = computed(() => (route: string) => {
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            isActive('/my-bids')
+                            $page.component === '/dashboard'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -187,7 +185,7 @@ const isActive = computed(() => (route: string) => {
                     href="/settings"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        isActive('/settings')
+                        $page.component === '/dashboard'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -196,7 +194,7 @@ const isActive = computed(() => (route: string) => {
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            isActive('/settings')
+                            $page.component === '/dashboard'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -226,7 +224,7 @@ const isActive = computed(() => (route: string) => {
                 <Link
                     :href="route('logout')"
                     method="post"
-                    class="flex items-center px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition duration-200 group"
+                    class="w-full flex items-center px-4 py-3 rounded-lg text-red-500 hover:bg-red-50 hover:text-red-600 transition duration-200 group"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

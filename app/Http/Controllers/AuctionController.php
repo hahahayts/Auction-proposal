@@ -25,7 +25,7 @@ class AuctionController extends Controller
         // Create a new auction
          Auction::create($validatedData);
 
-        return redirect(route('dashboard'))
+        return redirect(route('auction'))
             ->with('success', 'Auction created successfully.');
     }
 }

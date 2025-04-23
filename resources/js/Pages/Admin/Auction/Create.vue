@@ -30,7 +30,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post("/dashboard", {
+    form.post("/auctions", {
         onFinish: () => {
             // form.reset();
             toast.success("Form submitted successfully!");
