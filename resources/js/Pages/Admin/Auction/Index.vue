@@ -58,35 +58,35 @@ const formatDate = (dateString) => {
             <div class="bg-white rounded-lg shadow overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full whitespace-nowrap">
-                        <thead class="bg-gray-50 border-b border-gray-200">
+                        <thead class="bg-blue-300 border-b border-gray-200">
                             <tr>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider"
                                 >
                                     Title
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider"
                                 >
                                     Category
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider"
                                 >
                                     Start Price
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider"
                                 >
                                     Start Time
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider"
                                 >
                                     End Time
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider"
                                 >
                                     Actions
                                 </th>

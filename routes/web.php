@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
    Route::get('/dashboard',[AdminController::class,'dashboard'])->name('dashboard');
    Route::get('/auctions',[AdminController::class,'auction'])->name('auction');
    Route::post('/auctions',[AuctionController::class,'store'])->name('auctions.create');
+   Route::get('/users',[AdminController::class,'users'])->name('users');
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

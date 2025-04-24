@@ -1,18 +1,14 @@
 <script setup>
 import Sidebar from "@/Components/Sidebar.vue";
-import Create from "./Auction/Create.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
 
 defineProps({
     user: Object,
+    usersCount: Number,
     categories: Array,
 });
 
-const showModal = ref(false);
-
 // Static stats
-const totalUsers = 128;
 const ongoingAuctions = 14;
 const endedAuctions = 56;
 
@@ -158,7 +154,7 @@ const currentDate = new Date().toLocaleDateString("en-US", {
                             Total Users
                         </h2>
                         <p class="text-3xl font-bold text-gray-800 mt-1">
-                            {{ totalUsers }}
+                            {{ usersCount }}
                         </p>
                     </div>
                 </div>

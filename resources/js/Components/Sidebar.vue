@@ -19,13 +19,14 @@ defineProps({
         <aside class="w-72 bg-white shadow-xl p-6 flex flex-col">
             <!-- Logo & Header -->
             <div class="mb-8">
-                <div class="flex items-center justify-around">
+                <!-- {{ $page.component }} -->
+                <div class="flex items-center gap-3">
                     <div
                         class="w-[50px] h-[50px] bg-gray-600 rounded-full"
                     ></div>
-                    <div>
+                    <div class="w-1/2">
                         <h1
-                            class="text-2xl font-bold text-gray-800 flex items-center capitalize"
+                            class="text-2xl font-bold text-gray-800 flex items-center capitalize truncate"
                         >
                             {{ user.name }}
                         </h1>
@@ -106,10 +107,12 @@ defineProps({
                     </svg>
                     <span class="font-medium"> Auctions</span>
                     <span
-                        v-if="$page.component === '/dashboard'"
+                        v-if="$page.component === '/Admin/Auction/Index'"
                         class="ml-auto w-1 h-8 bg-blue-600 rounded-full"
                     ></span>
                 </Link>
+
+                <!-- All Bids -->
 
                 <Link
                     href="#"
@@ -146,11 +149,12 @@ defineProps({
                     >
                 </Link>
 
+                <!-- Users -->
                 <Link
-                    href="#"
+                    href="/users"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        $page.component === '/dashboard'
+                        $page.component === 'Admin/Users/Index'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -159,7 +163,7 @@ defineProps({
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            $page.component === '/dashboard'
+                            $page.component === 'Admin/Users/Index'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -175,10 +179,6 @@ defineProps({
                         />
                     </svg>
                     <span class="font-medium">Users</span>
-                    <span
-                        class="ml-auto bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full"
-                        >5</span
-                    >
                 </Link>
 
                 <Link
