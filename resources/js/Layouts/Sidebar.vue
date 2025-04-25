@@ -1,16 +1,5 @@
 <script setup lang="ts">
 import { Link } from "@inertiajs/vue3";
-
-defineProps({
-    currentRoute: {
-        type: String,
-        default: "/auctions",
-    },
-    user: {
-        type: Object,
-        required: true,
-    },
-});
 </script>
 
 <template>
@@ -28,10 +17,10 @@ defineProps({
                         <h1
                             class="text-2xl font-bold text-gray-800 flex items-center capitalize truncate"
                         >
-                            {{ user.name }}
+                            {{ $page.props.auth.user.name }}
                         </h1>
-                        <p v-if="user" class="text-sm text-gray-500 mt-1">
-                            {{ user.email }}
+                        <p class="text-sm text-gray-500 mt-1">
+                            {{ $page.props.auth.user.email }}
                         </p>
                     </div>
                 </div>
@@ -41,7 +30,7 @@ defineProps({
             <nav class="space-y-2 flex-1">
                 <!-- Dashboard -->
                 <Link
-                    href="/dashboard"
+                    href="/admin/dashboard"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
                         $page.component === 'Admin/Dashboard'
@@ -78,7 +67,7 @@ defineProps({
 
                 <!-- Auction -->
                 <Link
-                    href="/auctions"
+                    href="/admin/auctions"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
                         $page.component === 'Admin/Auction/Index'
@@ -151,7 +140,7 @@ defineProps({
 
                 <!-- Users -->
                 <Link
-                    href="/users"
+                    href="/admin/users"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
                         $page.component === 'Admin/Users/Index'

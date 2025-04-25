@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission ;
 use Spatie\Permission\Models\Role;
 
 class RolesAndPermissionSeeder extends Seeder
@@ -13,11 +14,21 @@ class RolesAndPermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['admin', 'user'];
 
-        foreach($roles as $role){
-            Role::create(['name' => $role]);
-        }
+        // Roles and Permissions
+
+        $admin_permission = Permission::create(['name' => 'admin']);
+        $user_permission = Permission::create(['name' => 'user']);
+
+        $admin_role = Role::create(['name' => 'admin']);
+        $user_role = Role::create(['name' => 'user']);
+
+       
+
+        $admin_role->givePermissionTo($admin_permission);
+        $user_role->givePermissionTo($user_permission);
+
+
 
         $admin = User::create([
             'name' => 'admin',

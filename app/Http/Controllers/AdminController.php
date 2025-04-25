@@ -18,23 +18,17 @@ class AdminController extends Controller
 
 
         return inertia('Admin/Dashboard',[
-            'user' => $user,
             'usersCount' => $usersCount,
             'categories' => $categories,
         ]);
     
     }
 
-    public function home(){
-        return inertia('User/Index');
-    }
-
+  
     public function auction(){
-        $user = Auth::user();
         $categories = Category::all();
-        $auctions = Auction::with('category')->get();
+        $auctions = Auction::with('category')->paginate(25);
         return inertia('Admin/Auction/Index',[
-            'user' => $user,
             'categories' => $categories,
             'auctions' => $auctions,
         ]);

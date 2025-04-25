@@ -1,5 +1,5 @@
 <script setup>
-import Sidebar from "@/Components/Sidebar.vue";
+import Sidebar from "@/Layouts/Sidebar.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
 
