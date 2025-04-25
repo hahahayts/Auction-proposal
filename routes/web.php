@@ -2,6 +2,7 @@
 
     use App\Http\Controllers\AdminController;
     use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\UserController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 
         // user routes
         Route::get('/auctions', [UserController::class, 'home'])->name('home');
+        Route::post('/auctions/bid/{auction_id}', [BidController::class, 'placeBidAmount'])->name('bid');
         Route::get('/auctions/{id}', [UserController::class, 'auctionInfo']);
 
         // admin routes

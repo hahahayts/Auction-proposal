@@ -3,7 +3,9 @@ import Modal from "@/Components/Modal.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
-import { ref, computed } from "vue";
+import { computed } from "vue";
+import { useForm } from "@inertiajs/vue3";
+import { toast } from "vue3-toastify";
 
 const props = defineProps({
     auction: {
@@ -18,9 +20,22 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "placeBid"]);
 
-// Form handling
-const bidAmount = ref("");
-const bidError = ref("");
+const form = useForm({
+    amount: 0,
+});
+
+const submitBid = () => {
+    form.post(`/auctions/bid/${props.auction.id}`, {
+        onSuccess: () => {
+            emit("close");
+            form.reset();
+            toast.success("Bid placed successfully!");
+        },
+        onError: (errors) => {
+            console.error(errors);
+        },
+    });
+};
 
 // Calculate minimum bid (current bid + 10% or at least 100)
 const minimumBid = computed(() => {
@@ -35,36 +50,6 @@ const formatCurrency = (value) => {
         currency: "PHP",
         minimumFractionDigits: 2,
     }).format(value);
-};
-
-// Handle bid submission
-const submitBid = () => {
-    // Clear previous errors
-    bidError.value = "";
-
-    // Validate bid amount
-    if (!bidAmount.value) {
-        bidError.value = "Please enter a bid amount";
-        return;
-    }
-
-    const amount = parseFloat(bidAmount.value);
-
-    if (isNaN(amount)) {
-        bidError.value = "Please enter a valid amount";
-        return;
-    }
-
-    if (amount < minimumBid.value) {
-        bidError.value = `Your bid must be at least ${formatCurrency(
-            minimumBid.value
-        )}`;
-        return;
-    }
-
-    // Submit the bid
-    emit("placeBid", amount);
-    bidAmount.value = "";
 };
 
 // Time remaining calculation
@@ -188,7 +173,7 @@ const timeRemaining = computed(() => {
                         />
                         <TextInput
                             id="bid"
-                            v-model="bidAmount"
+                            v-model="form.amount"
                             type="number"
                             step="0.01"
                             class="mt-1 block w-full"
@@ -200,6 +185,8 @@ const timeRemaining = computed(() => {
                             Enter an amount of at least
                             {{ formatCurrency(minimumBid) }}
                         </p>
+
+                        <InputError :message="form.errors.amount" />
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -209,9 +196,6 @@ const timeRemaining = computed(() => {
                         </p>
                         <button
                             type="submit"
-                            :disabled="
-                                !bidAmount || bidAmount < auction.current_bid
-                            "
                             class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition cursor-pointer"
                         >
                             Place Bid
