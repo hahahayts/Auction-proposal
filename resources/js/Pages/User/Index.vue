@@ -1,37 +1,19 @@
 <script setup>
 import { Head } from "@inertiajs/vue3";
-import { ref, computed } from "vue";
+import { ref } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 import Navbar from "@/Layouts/Navbar.vue";
 import AuctionCard from "./Auction/components/AuctionCard.vue";
 
 const props = defineProps({
     auctions: {
-        type: Array,
+        type: Object,
         required: true,
     },
 });
 
-// Use props.auctions if available, otherwise use mockAuctions
-const allAuctions = computed(() =>
-    props.auctions?.length ? props.auctions : mockAuctions
-);
-
-// Filter functionality
-const statusFilter = ref("all");
 const searchQuery = ref("");
-
-const filteredAuctions = computed(() => {
-    return allAuctions.value.filter((auction) => {
-        const matchesStatus =
-            statusFilter.value === "all" ||
-            auction.status === statusFilter.value;
-        const matchesSearch = auction.title
-            .toLowerCase()
-            .includes(searchQuery.value.toLowerCase());
-        return matchesStatus && matchesSearch;
-    });
-});
 </script>
 
 <template>
@@ -50,50 +32,50 @@ const filteredAuctions = computed(() => {
             <!-- Filter and Search Controls -->
             <div class="flex flex-col md:flex-row justify-between mb-8 gap-4">
                 <div class="flex flex-wrap gap-2">
-                    <button
-                        @click="statusFilter = 'all'"
+                    <Link
+                        href="/auctions"
                         class="px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="
-                            statusFilter === 'all'
+                            $page.url === '/auctions'
                                 ? 'bg-blue-600 text-white shadow-md'
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                         "
                     >
                         All
-                    </button>
-                    <button
-                        @click="statusFilter = 'ongoing'"
+                    </Link>
+                    <Link
+                        :href="'/auctions?status=ongoing'"
                         class="px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="
-                            statusFilter === 'ongoing'
+                            $page.url === '/auctions?status=ongoing'
                                 ? 'bg-blue-600 text-white shadow-md'
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                         "
                     >
                         Active
-                    </button>
-                    <button
-                        @click="statusFilter = 'upcoming'"
+                    </Link>
+                    <Link
+                        :href="'/auctions?status=upcoming'"
                         class="px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="
-                            statusFilter === 'upcoming'
+                            $page.url === '/auctions?status=upcoming'
                                 ? 'bg-blue-600 text-white shadow-md'
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                         "
                     >
                         Upcoming
-                    </button>
-                    <button
-                        @click="statusFilter = 'ended'"
+                    </Link>
+                    <Link
+                        :href="'/auctions?status=closed'"
                         class="px-4 py-2 rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         :class="
-                            statusFilter === 'ended'
+                            $page.url === '/auctions?status=closed'
                                 ? 'bg-blue-600 text-white shadow-md'
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                         "
                     >
                         Closed
-                    </button>
+                    </Link>
                 </div>
                 <div class="relative">
                     <div
@@ -123,11 +105,11 @@ const filteredAuctions = computed(() => {
 
             <!-- Auctions Grid -->
             <div
-                v-if="filteredAuctions.length"
+                v-if="auctions.data.length > 0"
                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
                 <div
-                    v-for="auction in filteredAuctions"
+                    v-for="auction in auctions.data"
                     :key="auction.id"
                     class="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 bg-white flex flex-col h-full"
                 >
@@ -136,41 +118,112 @@ const filteredAuctions = computed(() => {
                 </div>
             </div>
 
-            <!-- Empty state -->
-            <div
-                v-else
-                class="text-center py-16 bg-gray-50 rounded-lg border border-gray-200 shadow-sm"
-            >
-                <svg
-                    class="mx-auto h-12 w-12 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
-                <h3 class="mt-2 text-lg font-medium text-gray-900">
-                    No auctions found
-                </h3>
-                <p class="mt-1 text-gray-500">
-                    No auctions found matching your criteria
-                </p>
-                <button
-                    @click="
-                        statusFilter = 'all';
-                        searchQuery = '';
-                    "
-                    class="mt-6 px-5 py-2 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                    Clear Filters
-                </button>
+            <div v-else class="text-center text-gray-500 py-8">
+                No auctions found.
             </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-end mt-6 mb-3">
+                <div class="inline-flex items-center justify-center gap-1">
+                    <!-- First page button -->
+                    <Link
+                        :href="auctions.first_page_url"
+                        class="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span class="sr-only">First page</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414z"
+                                clip-rule="evenodd"
+                            />
+                            <path
+                                fill-rule="evenodd"
+                                d="M8.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L4.414 10l4.293 4.293a1 1 0 010 1.414z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </Link>
+
+                    <!-- Previous page button -->
+                    <Link
+                        v-if="auctions.prev_page_url"
+                        :href="auctions.prev_page_url"
+                        class="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span class="sr-only">Previous page</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </Link>
+
+                    <!-- Page numbers -->
+                    <span
+                        >Page {{ auctions.current_page }} of
+                        {{ auctions.last_page }}
+                    </span>
+
+                    <!-- Next page button -->
+                    <Link
+                        :href="auctions.next_page_url"
+                        class="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span class="sr-only">Next page</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </Link>
+
+                    <!-- Last page button -->
+                    <Link
+                        :href="auctions.last_page_url"
+                        class="flex items-center justify-center w-8 h-8 rounded-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <span class="sr-only">Last page</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M4.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L8.586 10l-4.293 4.293a1 1 0 000 1.414z"
+                                clip-rule="evenodd"
+                            />
+                            <path
+                                fill-rule="evenodd"
+                                d="M11.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L15.586 10l-4.293 4.293a1 1 0 000 1.414z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </Link>
+                </div>
+            </div>
+            <!-- End of Pagination -->
         </div>
     </Navbar>
 </template>

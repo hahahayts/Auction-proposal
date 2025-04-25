@@ -25,6 +25,7 @@ class AuctionFactory extends Factory
             'category_id' => rand(1,5),
             'start_price' => $this->faker->randomFloat(2, 1, 1000),
             'start_time' => $this->faker->dateTimeBetween('now', '+1 week'),
+            'status' => $this->faker->randomElement(['ongoing', 'upcoming', 'closed']),
             'end_time' => $this->faker->dateTimeBetween('+1 week', '+2 weeks'),
         ];
 

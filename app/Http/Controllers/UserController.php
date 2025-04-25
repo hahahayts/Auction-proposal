@@ -8,7 +8,18 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function home(){
-        $auctions = Auction::all();
+
+        $status = request()->query();
+
+        if($status)
+        {
+            $auctions = Auction::with('category')->where('status', $status)->paginate(25);
+        }
+        else
+        {
+            $auctions = Auction::with('category')->paginate(25);
+        }
+        
         return inertia('User/Index',[
             'auctions' => $auctions,
         ]);
