@@ -25,9 +25,10 @@ class UserController extends Controller
         ]);
     }
 
-    public function auctionInfo($id){
-        $auction = Auction::find($id);
-        return inertia('User/AuctionInfo',[
+    public function auctionInfo($auction_id){
+        $auction = Auction::with('category')->find($auction_id);
+    
+        return inertia('User/Auction/AuctionInfo', [
             'auction' => $auction,
         ]);
     }

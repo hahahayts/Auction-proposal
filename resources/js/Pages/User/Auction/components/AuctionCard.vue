@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import { Link } from "@inertiajs/vue3";
 
 import Bid from "./Bid.vue";
 
@@ -78,11 +79,12 @@ const formatCurrency = (value) => {
             </div>
         </div>
         <div class="mt-4 flex justify-between gap-2">
-            <button
-                class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            <Link
+                :href="`/auctions/${auction.id}`"
+                class="w-full flex-1 px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-center"
             >
                 View Details
-            </button>
+            </Link>
             <button
                 @click="showModal = true"
                 v-if="auction.status === 'ongoing'"

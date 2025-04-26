@@ -17,7 +17,7 @@ use App\Http\Controllers\ProfileController;
         // user routes
         Route::get('/auctions', [UserController::class, 'home'])->name('home');
         Route::post('/auctions/bid/{auction_id}', [BidController::class, 'placeBidAmount'])->name('bid');
-        Route::get('/auctions/{id}', [UserController::class, 'auctionInfo']);
+        Route::get('/auctions/{auction_id}', [UserController::class, 'auctionInfo']);
 
         // admin routes
         Route::middleware(['can:admin'])->group(function () {

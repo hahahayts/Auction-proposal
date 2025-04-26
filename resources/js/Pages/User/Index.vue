@@ -25,7 +25,8 @@ const searchQuery = ref("");
                     All Auctions
                 </h1>
                 <p class="text-gray-600">
-                    Manage your ongoing and past auctions
+                    Browse and find auctions auctions here. Use the filters to
+                    find specific auctions or search by name.
                 </p>
             </div>
 
@@ -52,7 +53,7 @@ const searchQuery = ref("");
                                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                         "
                     >
-                        Active
+                        Ongoing
                     </Link>
                     <Link
                         :href="'/auctions?status=upcoming'"

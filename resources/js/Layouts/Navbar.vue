@@ -18,7 +18,7 @@ import UserDropdown from "@/Components/navbar/UserDropdown.vue";
                     <Link
                         href="/auctions"
                         :class="
-                            $page.url === '/auctions'
+                            $page.component.includes('User/Auction')
                                 ? 'text-blue-600'
                                 : 'text-gray-700'
                         "
