@@ -10,7 +10,14 @@ class UserController extends Controller
 {
     public function home($category_id = null)
     {
+
         $query = Auction::with(['category', 'user']); // include related user
+
+         $q = request()->query();
+
+         if($q['search'] ?? false){
+            $query->where('title', 'like', '%'.$q['search'].'%');
+         }
     
         if ($category_id) {
             $query->where('category_id', $category_id);

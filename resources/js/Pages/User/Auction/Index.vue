@@ -1,10 +1,12 @@
 <script setup>
-import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
+import { Head, router } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 import Navbar from "@/Layouts/Navbar.vue";
 import AuctionCard from "./components/AuctionCard.vue";
+import { throttle } from "lodash";
+import { debounce } from "lodash";
 
 const props = defineProps({
     auctions: {
@@ -18,6 +20,13 @@ const props = defineProps({
 });
 
 const searchQuery = ref("");
+watch(
+    searchQuery,
+    debounce(
+        (q) => router.get("/auctions", { search: q }, { preserveState: true }),
+        300
+    )
+);
 </script>
 
 <template>
@@ -44,7 +53,7 @@ const searchQuery = ref("");
                             href="/auctions"
                             class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200"
                             :class="
-                                $page.url === '/auctions'
+                                $page.component.includes('User/Auction')
                                     ? 'text-blue-600 font-semibold border-b-2 border-blue-600'
                                     : ''
                             "
