@@ -32,8 +32,12 @@ const submitBid = () => {
         return;
     }
 
+    const currentScrollPosition = window.scrollY;
+
     form.post(`/auctions/bid/${props.auction.id}`, {
         onSuccess: () => {
+            window.scrollTo(0, currentScrollPosition); // Restore scroll position
+
             emit("close");
             form.reset();
             toast.success("Bid placed successfully!");
