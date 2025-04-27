@@ -1,11 +1,13 @@
 <script setup>
 import Navbar from "@/Layouts/Navbar.vue";
-import { Head } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
-
 defineProps({
     auction: {
         type: Object,
+        required: true,
+    },
+    bids: {
+        type: Array,
         required: true,
     },
 });
@@ -19,7 +21,24 @@ const formatCurrency = (value) => {
     } catch (error) {
         return `₱${value}`;
     }
-};  
+};
+
+const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        });
+    } catch (error) {
+        return "Invalid date";
+    }
+};
+
+// Store the previous URL
 </script>
 
 <template>
@@ -47,6 +66,8 @@ const formatCurrency = (value) => {
                 </svg>
                 Back
             </Link>
+
+            <p>{{ previousUrl }}</p>
 
             <!-- Auction Header Section -->
             <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-6">
@@ -109,7 +130,7 @@ const formatCurrency = (value) => {
                             <dd
                                 class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
                             >
-                                ${{ auction.starting_price }}
+                                ${{ auction.start_price }}
                             </dd>
                         </div>
                         <div
@@ -157,9 +178,9 @@ const formatCurrency = (value) => {
                                 Seller
                             </dt>
                             <dd
-                                class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                                class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 capitalize"
                             >
-                                {{ auction.seller_name }}
+                                {{ auction.user.name }}
                             </dd>
                         </div>
                     </dl>
@@ -252,10 +273,7 @@ const formatCurrency = (value) => {
                     </h2>
                 </div>
                 <div class="border-t border-gray-200">
-                    <div
-                        v-if="auction.bids && auction.bids.length"
-                        class="overflow-hidden"
-                    >
+                    <div v-if="bids && bids.length" class="overflow-hidden">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -280,14 +298,11 @@ const formatCurrency = (value) => {
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <tr
-                                    v-for="(bid, index) in auction.bids"
-                                    :key="index"
-                                >
+                                <tr v-for="(bid, index) in bids" :key="index">
                                     <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                        class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 capitalize"
                                     >
-                                        {{ bid.bidder_name }}
+                                        {{ bid.user.name }}
                                     </td>
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
@@ -297,7 +312,7 @@ const formatCurrency = (value) => {
                                     <td
                                         class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                     >
-                                        {{ bid.created_at }}
+                                        {{ formatDate(bid.created_at) }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -311,7 +326,6 @@ const formatCurrency = (value) => {
                     </div>
                 </div>
             </div>
-            <p>{{ auction }}</p>
         </div>
     </Navbar>
 </template>

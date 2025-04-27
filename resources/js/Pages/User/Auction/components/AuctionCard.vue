@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 import Bid from "./Bid.vue";
+import { formatCurrency, formatDate } from "@/lib";
 
-defineProps({
+const props = defineProps({
     auction: {
         type: Object,
         required: true,
@@ -13,32 +14,29 @@ defineProps({
 
 const showModal = ref(false);
 
-// Format date helper
-const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
+const timeRemaining = computed(() => {
+    if (!props.auction.end_time) return "Auction ending soon";
 
-    try {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        });
-    } catch (error) {
-        return "Invalid date";
-    }
-};
+    const endDate = new Date(props.auction.end_time);
+    const now = new Date();
+    const diff = endDate - now;
 
-// Format currency helper to safely handle undefined or non-number values
-const formatCurrency = (value) => {
-    if (value === undefined || value === null) return "₱0";
-    if (typeof value !== "number") return `₱${value}`;
+    if (diff <= 0) return "Auction ended";
 
-    try {
-        return `₱${value.toLocaleString()}`;
-    } catch (error) {
-        return `₱${value}`;
-    }
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    if (days > 0) return `${days}d ${hours}h remaining`;
+    if (hours > 0) return `${hours}h ${minutes}m remaining`;
+    return `${minutes}m remaining`;
+});
+
+const handleTimeRemaining = (status) => {
+    if (status === "ongoing") return timeRemaining;
+    if (status === "upcoming") return "Upcoming auction";
+    // return formatDate(props.auction.start_time, "MMM D, YYYY h:mm A");
+    return "Auction ended";
 };
 </script>
 
@@ -74,8 +72,17 @@ const formatCurrency = (value) => {
             <div class="flex justify-between text-sm">
                 <span class="text-gray-600">Ends:</span>
                 <span class="text-gray-900">{{
-                    formatDate(auction.endDate)
+                    handleTimeRemaining(auction.status)
                 }}</span>
+            </div>
+            <div class="flex justify-between items-center text-sm capitalize">
+                <p>
+                    Owner:
+                    <span class="font-semibold"> {{ auction.user.name }}</span>
+                </p>
+                <p class="bg-pink-50 py-1 px-3 rounded-full">
+                    {{ auction.category.name }}
+                </p>
             </div>
         </div>
         <div class="mt-4 flex justify-between gap-2">

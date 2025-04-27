@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('imageURL')->nullable();
             $table->foreignId('category_id')->constrained('categories');
+            $table->foreignId('user_id')->constrained('users');
             $table->decimal('start_price', 10, 2);
             $table->decimal('current_bid', 10, 2)->nullable();
             $table->timestamp('start_time')->nullable();

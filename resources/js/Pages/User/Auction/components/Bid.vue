@@ -2,10 +2,11 @@
 import Modal from "@/Components/Modal.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
-import InputError from "@/Components/InputError.vue";
 import { computed } from "vue";
 import { useForm } from "@inertiajs/vue3";
 import { toast } from "vue3-toastify";
+
+import { formatCurrency } from "@/lib/index.js";
 
 const props = defineProps({
     auction: {
@@ -21,10 +22,16 @@ const props = defineProps({
 const emit = defineEmits(["close", "placeBid"]);
 
 const form = useForm({
-    amount: 0,
+    amount: props.auction.amount,
 });
 
 const submitBid = () => {
+    if (form.amount < minimumBid.value) {
+        // use minimumBid
+        form.errors.amount = "Your bid is lower than the minimum required!";
+        return;
+    }
+
     form.post(`/auctions/bid/${props.auction.id}`, {
         onSuccess: () => {
             emit("close");
@@ -37,26 +44,20 @@ const submitBid = () => {
     });
 };
 
-// Calculate minimum bid (current bid + 10% or at least 100)
+// Calculate minimum bid based on current bid and start price
 const minimumBid = computed(() => {
     const currentBid = props.auction.current_bid || 0;
-    return Math.max(currentBid + currentBid * 0.1, currentBid + 100);
+    return Math.max(
+        currentBid + currentBid * 0.1,
+        currentBid + props.auction.start_price || 100
+    );
 });
-
-// Format currency
-const formatCurrency = (value) => {
-    return new Intl.NumberFormat("en-PH", {
-        style: "currency",
-        currency: "PHP",
-        minimumFractionDigits: 2,
-    }).format(value);
-};
 
 // Time remaining calculation
 const timeRemaining = computed(() => {
-    if (!props.auction.end_date) return "Auction ending soon";
+    if (!props.auction.end_time) return "Auction ending soon";
 
-    const endDate = new Date(props.auction.end_date);
+    const endDate = new Date(props.auction.end_time);
     const now = new Date();
     const diff = endDate - now;
 
@@ -135,18 +136,18 @@ const timeRemaining = computed(() => {
                         <div
                             class="flex justify-between py-2 border-b border-gray-200"
                         >
-                            <span class="text-gray-600">Minimum Bid:</span>
+                            <span class="text-gray-600">Starting Price:</span>
                             <span class="font-semibold">{{
-                                formatCurrency(minimumBid)
+                                formatCurrency(auction.start_price || 0)
                             }}</span>
                         </div>
 
                         <div
                             class="flex justify-between py-2 border-b border-gray-200"
                         >
-                            <span class="text-gray-600">Bids Placed:</span>
+                            <span class="text-gray-600">Minimum Bid:</span>
                             <span class="font-semibold">{{
-                                auction.bids_count || 0
+                                formatCurrency((auction.start_price || 0) ?? +1)
                             }}</span>
                         </div>
 
@@ -175,28 +176,34 @@ const timeRemaining = computed(() => {
                             id="bid"
                             v-model="form.amount"
                             type="number"
-                            step="0.01"
+                            :step="form.amount * 0.5"
                             class="mt-1 block w-full"
                             :placeholder="formatCurrency(minimumBid)"
                             min="0"
                         />
-                        <InputError :message="bidError" class="mt-1" />
+
                         <p class="text-xs text-gray-500 mt-1">
                             Enter an amount of at least
                             {{ formatCurrency(minimumBid) }}
+                            <!-- {{ auction.current_bid }} -->
                         </p>
 
-                        <InputError :message="form.errors.amount" />
+                        <!-- <InputError :message="form.errors.amount" /> -->
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <p class="text-sm text-gray-600">
+                        <p class="text-sm text-gray-600 capitalize">
                             <span class="font-semibold">Seller:</span>
-                            {{ auction.seller?.name || "Unknown" }}
+                            {{ auction.user.name || "Unknown" }}
                         </p>
                         <button
                             type="submit"
-                            class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition cursor-pointer"
+                            :disabled="
+                                form.amount < minimumBid ||
+                                form.amount < start_price ||
+                                form.processing
+                            "
+                            class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Place Bid
                         </button>

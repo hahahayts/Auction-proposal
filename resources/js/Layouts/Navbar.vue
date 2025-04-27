@@ -1,6 +1,6 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
 import UserDropdown from "@/Components/navbar/UserDropdown.vue";
+import { Link } from "@inertiajs/vue3";
 </script>
 
 <template>
@@ -35,7 +35,7 @@ import UserDropdown from "@/Components/navbar/UserDropdown.vue";
                     >
                         My Bids
                     </Link>
-                    <Link> My Auctions </Link>
+                    <Link href="/my-auctions"> My Auctions </Link>
                 </div>
                 <div class="flex items-center space-x-4">
                     <UserDropdown />

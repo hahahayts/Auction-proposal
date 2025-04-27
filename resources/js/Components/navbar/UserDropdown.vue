@@ -7,7 +7,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
     <Dropdown align="right" width="48">
         <template #trigger>
             <button
-                class="flex gap-2 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none"
+                class="flex gap-2 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none capitalize"
             >
                 <span>{{ $page.props.auth.user.name }}</span>
                 <div

@@ -1,46 +1,18 @@
 <script setup>
 import Sidebar from "@/Layouts/Sidebar.vue";
 import { Head } from "@inertiajs/vue3";
-import { ref } from "vue";
 
 const props = defineProps({
-    user: {
-        type: Object,
-        required: true,
-    },
     users: {
         type: Array,
         required: true,
     },
 });
-
-const searchQuery = ref("");
-const filteredUsers = ref([]);
-
-// Filter users based on search query
-const filterUsers = () => {
-    if (!searchQuery.value) {
-        filteredUsers.value = props.users;
-        return;
-    }
-
-    const query = searchQuery.value.toLowerCase();
-    filteredUsers.value = props.users.filter(
-        (user) =>
-            user.name.toLowerCase().includes(query) ||
-            user.email.toLowerCase().includes(query) ||
-            (user.roles.length > 0 &&
-                user.roles[0].name.toLowerCase().includes(query))
-    );
-};
-
-// Initialize filtered users
-filterUsers();
 </script>
 
 <template>
     <Head title="Manage Users" />
-    <Sidebar :user="user">
+    <Sidebar>
         <div class="flex-1 p-6 lg:p-8 bg-gray-50">
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-6">
@@ -107,7 +79,7 @@ filterUsers();
                             </thead>
                             <tbody class="divide-y divide-gray-200">
                                 <tr
-                                    v-for="user in filteredUsers"
+                                    v-for="user in users"
                                     :key="user.id"
                                     class="hover:bg-gray-50 transition-colors duration-150 ease-in-out"
                                 >
@@ -157,22 +129,6 @@ filterUsers();
                                         <span
                                             v-if="user.roles.length > 0"
                                             class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full"
-                                            :class="{
-                                                'bg-blue-100 text-blue-800':
-                                                    user.roles[0].name ===
-                                                    'Admin',
-                                                'bg-green-100 text-green-800':
-                                                    user.roles[0].name ===
-                                                    'Manager',
-                                                'bg-purple-100 text-purple-800':
-                                                    user.roles[0].name ===
-                                                    'Editor',
-                                                'bg-gray-100 text-gray-800': ![
-                                                    'Admin',
-                                                    'Manager',
-                                                    'Editor',
-                                                ].includes(user.roles[0].name),
-                                            }"
                                         >
                                             {{ user.roles[0].name }}
                                         </span>
@@ -253,9 +209,8 @@ filterUsers();
                                         </div>
                                     </td>
                                 </tr>
-
                                 <!-- Empty state -->
-                                <tr v-if="filteredUsers.length === 0">
+                                <tr v-if="users.length === 0">
                                     <td
                                         colspan="6"
                                         class="px-6 py-12 text-center"
