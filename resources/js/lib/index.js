@@ -1,5 +1,5 @@
 export const formatCurrency = (value) => {
-    if (value === undefined || value === null) return "₱0";
+    if (value === undefined || value === null || isNaN(value)) return "₱0";
     if (typeof value !== "number") return `₱${value}`;
 
     try {

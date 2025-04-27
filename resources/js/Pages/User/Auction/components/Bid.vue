@@ -22,7 +22,7 @@ const props = defineProps({
 const emit = defineEmits(["close", "placeBid"]);
 
 const form = useForm({
-    amount: props.auction.amount,
+    amount: props.auction.current_bid || props.auction.start_price || 0,
 });
 
 const submitBid = () => {
@@ -46,11 +46,9 @@ const submitBid = () => {
 
 // Calculate minimum bid based on current bid and start price
 const minimumBid = computed(() => {
-    const currentBid = props.auction.current_bid || 0;
-    return Math.max(
-        currentBid + currentBid * 0.1,
-        currentBid + props.auction.start_price || 100
-    );
+    const currentPrice =
+        props.auction.current_bid ?? props.auction.start_price ?? 0;
+    return currentPrice;
 });
 
 // Time remaining calculation
@@ -187,8 +185,6 @@ const timeRemaining = computed(() => {
                             {{ formatCurrency(minimumBid) }}
                             <!-- {{ auction.current_bid }} -->
                         </p>
-
-                        <!-- <InputError :message="form.errors.amount" /> -->
                     </div>
 
                     <div class="flex items-center justify-between">
@@ -199,9 +195,7 @@ const timeRemaining = computed(() => {
                         <button
                             type="submit"
                             :disabled="
-                                form.amount < minimumBid ||
-                                form.amount < start_price ||
-                                form.processing
+                                form.amount <= minimumBid + 1 || form.processing
                             "
                             class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
