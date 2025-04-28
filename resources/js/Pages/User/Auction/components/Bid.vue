@@ -149,7 +149,7 @@ const timeRemaining = computed(() => {
                         >
                             <span class="text-gray-600">Minimum Bid:</span>
                             <span class="font-semibold">{{
-                                formatCurrency((auction.start_price || 0) ?? +1)
+                                formatCurrency(minimumBid)
                             }}</span>
                         </div>
 

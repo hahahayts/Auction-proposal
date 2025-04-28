@@ -20,12 +20,13 @@ use App\Http\Controllers\ProfileController;
         Route::post('/auctions/bid/{auction_id}', [BidController::class, 'placeBidAmount'])->name('bid');
         Route::get('/auctions/{auction_id}', [UserController::class, 'auctionInfo']);
         Route::get('/my-bids', [UserController::class, 'myBids'])->name('my-bids');
-        Route::get('/my-auctions', [UserController::class, 'myAuctions'])->name('my-bids');
+        Route::get('/my-auctions', [UserController::class, 'myAuctions'])->name('user.auction');
+        Route::post('/my-auctions/create', [AuctionController::class, 'store']);
 
         // admin routes
         Route::middleware(['can:admin'])->group(function () {
             Route::get('/admin/dashboard',[AdminController::class,'dashboard'])->name('dashboard');
-            Route::get('/admin/auctions',[AdminController::class,'auction'])->name('auction');
+            Route::get('/admin/auctions',[AdminController::class,'auction'])->name('admin.auction');
             Route::post('/admin/auctions',[AuctionController::class,'store'])->name('auctions.create');
             Route::get('/admin/users',[AdminController::class,'users'])->name('users');
         });

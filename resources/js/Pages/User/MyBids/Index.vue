@@ -2,16 +2,19 @@
 import { Head, Link } from "@inertiajs/vue3";
 import Navbar from "@/Layouts/Navbar.vue";
 
-defineProps({
+const props = defineProps({
     bids: {
         type: Array,
         required: true,
     },
 });
+
+console.log("All Bids: ", props.bids);
 </script>
 
 <template>
     <Head title="My Bids" />
+
     <Navbar>
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
             <!-- Header Section -->

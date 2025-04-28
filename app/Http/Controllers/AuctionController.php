@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Auction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuctionController extends Controller
 {
@@ -22,10 +23,16 @@ class AuctionController extends Controller
             'end_time' => 'required|date|after:start_time',
         ]);
 
-        // Create a new auction
-         Auction::create($validatedData);
+        $user = Auth::user();
 
-        return redirect(route('auction'))
+        // Create a new auction
+         Auction::create([$validatedData,
+        'user_id' => $user->id,
+        ]);
+
+         if($user->hasRole('admin'))return redirect(route('admin.auction'))->with('success', 'Auction created successfully.');
+
+        return redirect(route('user.auction'))
             ->with('success', 'Auction created successfully.');
     }
 }

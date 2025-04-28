@@ -8,7 +8,7 @@ import { toast } from "vue3-toastify";
 
 const emit = defineEmits(["close"]);
 
-defineProps({
+const props = defineProps({
     categories: {
         type: Array,
         required: true,
@@ -16,6 +16,10 @@ defineProps({
     show: {
         type: Boolean,
         default: false,
+    },
+    postURL: {
+        type: String,
+        required: true,
     },
 });
 
@@ -30,7 +34,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post("/auctions", {
+    form.post(props.postURL, {
         onFinish: () => {
             // form.reset();
             toast.success("Form submitted successfully!");

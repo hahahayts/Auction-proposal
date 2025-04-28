@@ -55,9 +55,11 @@ class UserController extends Controller
     }
 
     public function myAuctions(){
-        $auctions = Auction::where('user_id', auth()->user()->id)->with('category')->get();
+        // $auctions = Auction::where('user_id', auth()->user()->id)->with('category')->get();
+        $auctions = Auction::with(['category', 'user'])->where('user_id', auth()->user()->id)->get();
         return inertia('User/MyAuction/Index', [
             'auctions' => $auctions,
+            'categories' => Category::all()
         ]);
     }
 

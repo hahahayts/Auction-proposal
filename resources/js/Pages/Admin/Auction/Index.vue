@@ -1,6 +1,6 @@
 <script setup>
 import Sidebar from "@/Layouts/Sidebar.vue";
-import Create from "./Create.vue";
+import Create from "../../../Components/ui/Create.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref } from "vue";
 import { Link } from "@inertiajs/vue3";
@@ -355,6 +355,7 @@ const formatDate = (dateString) => {
         <Create
             :categories="categories"
             :show="showModal"
+            postURL="/admin/auctions"
             @close="showModal = false"
         />
     </Sidebar>
