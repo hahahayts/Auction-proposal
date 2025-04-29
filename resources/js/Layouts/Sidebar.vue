@@ -104,10 +104,10 @@ import { Link } from "@inertiajs/vue3";
                 <!-- All Bids -->
 
                 <Link
-                    href="#"
+                    href="/admin/bids"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        $page.component === '/dashboard'
+                        $page.url === '/admin/bids'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -116,7 +116,7 @@ import { Link } from "@inertiajs/vue3";
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            $page.component === '/dashboard'
+                            $page.url === '/admin/bids'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "
@@ -132,10 +132,6 @@ import { Link } from "@inertiajs/vue3";
                         />
                     </svg>
                     <span class="font-medium">All Bids</span>
-                    <span
-                        class="ml-auto bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded-full"
-                        >5</span
-                    >
                 </Link>
 
                 <!-- Users -->
@@ -171,10 +167,10 @@ import { Link } from "@inertiajs/vue3";
                 </Link>
 
                 <Link
-                    href="/settings"
+                    href="/admin/settings"
                     class="flex items-center px-4 py-3 rounded-lg transition duration-200 group"
                     :class="
-                        $page.component === '/dashboard'
+                        $page.url === '/admin/settings'
                             ? 'bg-blue-50 text-blue-600'
                             : 'text-gray-700 hover:bg-gray-100'
                     "
@@ -183,7 +179,7 @@ import { Link } from "@inertiajs/vue3";
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 mr-3"
                         :class="
-                            $page.component === '/dashboard'
+                            $page.url === '/admin/settings'
                                 ? 'text-blue-600'
                                 : 'text-gray-500 group-hover:text-blue-500'
                         "

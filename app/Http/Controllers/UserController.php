@@ -11,7 +11,7 @@ class UserController extends Controller
     public function home($category_id = null)
     {
 
-        $query = Auction::with(['category', 'user']); // include related user
+        $query = Auction::with(['category', 'user']); 
 
          $q = request()->query();
 
@@ -56,8 +56,9 @@ class UserController extends Controller
 
     public function myAuctions(){
         // $auctions = Auction::where('user_id', auth()->user()->id)->with('category')->get();
-        $auctions = Auction::with(['category', 'user'])->where('user_id', auth()->user()->id)->get();
-        return inertia('User/MyAuction/Index', [
+        $user = auth()->user();
+        $auctions = Auction::with(['category', 'user'])->whereBelongsTo($user)->get();
+                return inertia('User/MyAuction/Index', [
             'auctions' => $auctions,
             'categories' => Category::all()
         ]);

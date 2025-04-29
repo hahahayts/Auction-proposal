@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class AuctionController extends Controller
 {
-    //
-
     public function store(Request $request)
     {
         // Validate the request data
@@ -25,14 +23,49 @@ class AuctionController extends Controller
 
         $user = Auth::user();
 
+        // Merge user_id into validated data
+        $validatedData['user_id'] = $user->id;
+
         // Create a new auction
-         Auction::create([$validatedData,
-        'user_id' => $user->id,
-        ]);
+        Auction::create($validatedData);
 
-         if($user->hasRole('admin'))return redirect(route('admin.auction'))->with('success', 'Auction created successfully.');
-
-        return redirect(route('user.auction'))
-            ->with('success', 'Auction created successfully.');
+        return redirect()->back()->with('success', 'Bid placed successfully.');
     }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the request
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'imageURL' => 'nullable|url',
+            'category_id' => 'required|exists:categories,id',
+            'start_price' => 'required|numeric|min:0',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+    
+        // Find the auction
+        $auction = Auction::findOrFail($id);
+    
+        $auction->update($validatedData);
+    
+        return redirect()->back()->with('success', 'Auction updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+
+        $auction = Auction::findOrFail($id);
+    
+        if ($auction->user_id !== auth()->id()) {
+            abort(403); // Forbidden
+        }
+    
+        $auction->delete();
+    
+        return redirect()->back()->with('success', 'Auction deleted successfully.');
+    }
+    
+    
 }

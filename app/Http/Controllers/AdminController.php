@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Auction;
+use App\Models\Bid;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,11 +27,25 @@ class AdminController extends Controller
 
   
     public function auction(){
+        $query = Auction::with(['category', 'user']); 
+
         $categories = Category::all();
-        $auctions = Auction::with('category')->paginate(25);
+
+        if (request()->has('status')) {
+            $query->where('status', request('status'));
+        }
+
+        $auctions = $query->paginate(25);
         return inertia('Admin/Auction/Index',[
             'categories' => $categories,
             'auctions' => $auctions,
+        ]);
+    }
+
+    public function bids(){
+
+        return inertia('Admin/Bids/Index',[
+            'bids' => Bid::with(['auction', 'user'])->latest()->get(),
         ]);
     }
 
@@ -41,6 +56,11 @@ class AdminController extends Controller
             'user' => $user,
             'users' => $users,
         ]);
+    }
+
+    public function settings(){
+
+        return inertia('Admin/Settings/Index');
     }
     
 }

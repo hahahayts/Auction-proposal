@@ -34,6 +34,46 @@ const formatDate = (dateString) => {
         <div class="flex-1 p-6 lg:p-8 bg-gray-50">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-800">Auctions</h1>
+
+                <div>
+                    <div
+                        class="inline-flex rounded-md shadow-sm p-1 bg-gray-100"
+                    >
+                        <Link
+                            :href="'/admin/auctions?status=ongoing'"
+                            class="px-5 py-2 rounded-lg transition-all duration-200 focus:outline-none text-sm font-medium"
+                            :class="
+                                $page.url === '/admin/auctions?status=ongoing'
+                                    ? 'bg-blue-600 text-white shadow-md'
+                                    : 'hover:bg-gray-200 text-gray-700'
+                            "
+                        >
+                            Ongoing
+                        </Link>
+                        <Link
+                            :href="'/admin/auctions?status=upcoming'"
+                            class="px-5 py-2 rounded-lg transition-all duration-200 focus:outline-none text-sm font-medium"
+                            :class="
+                                $page.url === '/admin/auctions?status=upcoming'
+                                    ? 'bg-blue-600 text-white shadow-md'
+                                    : 'hover:bg-gray-200 text-gray-700'
+                            "
+                        >
+                            Upcoming
+                        </Link>
+                        <Link
+                            :href="'/admin/auctions?status=closed'"
+                            class="px-5 py-2 rounded-lg transition-all duration-200 focus:outline-none text-sm font-medium"
+                            :class="
+                                $page.url === '/admin/auctions?status=closed'
+                                    ? 'bg-blue-600 text-white shadow-md'
+                                    : 'hover:bg-gray-200 text-gray-700'
+                            "
+                        >
+                            Closed
+                        </Link>
+                    </div>
+                </div>
                 <button
                     @click="showModal = true"
                     class="flex items-center py-2 px-4 bg-blue-600 rounded-lg font-medium text-white hover:bg-blue-700 transition duration-200 shadow-sm"

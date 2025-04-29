@@ -1,3 +1,9 @@
-<script setup></script>
+<script setup>
+import Sidebar from "@/Layouts/Sidebar.vue";
+</script>
 
-<template></template>
+<template>
+    <Sidebar>
+        <h1>This is a settings Page</h1>
+    </Sidebar>
+</template>
