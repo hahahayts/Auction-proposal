@@ -5,23 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Bid extends Model
+class Notification extends Model
 {
-    /** @use HasFactory<\Database\Factories\BidFactory> */
+    /** @use HasFactory<\Database\Factories\NotificationFactory> */
     use HasFactory;
+
     protected $guarded = [];
 
-    public function auction()
-    {
-        return $this->belongsTo(Auction::class);
-    }
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function notifications()
+    public function bid()
     {
-        return $this->hasMany(Notification::class);
+        return $this->belongsTo(Bid::class);
     }
 }
