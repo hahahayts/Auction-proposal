@@ -1,5 +1,6 @@
 <script setup>
 import UserDropdown from "@/Components/navbar/UserDropdown.vue";
+import Notification from "@/Components/navbar/Notification.vue";
 import { Link } from "@inertiajs/vue3";
 </script>
 
@@ -37,8 +38,14 @@ import { Link } from "@inertiajs/vue3";
                     </Link>
                     <Link href="/my-auctions"> My Auctions </Link>
                 </div>
+
                 <div class="flex items-center space-x-4">
-                    <UserDropdown />
+                    <!-- Notification -->
+                    <Notification />
+                    <!-- User Dropdown -->
+                    <div class="flex items-center space-x-4">
+                        <UserDropdown />
+                    </div>
                 </div>
             </div>
         </nav>

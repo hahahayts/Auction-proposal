@@ -9,7 +9,7 @@ import DropdownLink from "@/Components/DropdownLink.vue";
             <button
                 class="flex gap-2 items-center text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none capitalize"
             >
-                <span>{{ $page.props.auth.user.name }}</span>
+                <!-- <span>{{ $page.props.auth.user.name }}</span> -->
                 <div
                     class="relative w-[50px] h-[50px] bg-gray-500 rounded-full"
                 >
@@ -31,6 +31,12 @@ import DropdownLink from "@/Components/DropdownLink.vue";
         </template>
 
         <template #content>
+            <p
+                class="text-center mb-2 bg-gray-200 font-semibold capitalize text-gray-700 px-4 py-2"
+            >
+                {{ $page.props.auth.user.name }}
+            </p>
+
             <DropdownLink href="/profile">Profile</DropdownLink>
             <DropdownLink href="/settings">Settings</DropdownLink>
             <DropdownLink method="post" href="/logout" as="button">
