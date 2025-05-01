@@ -13,6 +13,8 @@ class UserController extends Controller
 
         $query = Auction::with(['category', 'user']); 
 
+        
+
          $q = request()->query();
 
          if($q['search'] ?? false){
@@ -26,8 +28,10 @@ class UserController extends Controller
         if (request()->has('status')) {
             $query->where('status', request('status'));
         }
+
     
         $auctions = $query->paginate(25);
+
     
         return inertia('User/Auction/Index', [
             'auctions' => $auctions,

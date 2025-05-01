@@ -4,6 +4,7 @@
     use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
     use App\Http\Controllers\UserController;
     use Illuminate\Support\Facades\Route;
@@ -25,6 +26,10 @@ use App\Http\Controllers\ProfileController;
         Route::post('/my-auctions/create', [AuctionController::class, 'store']);
         Route::put('/my-auctions/edit/{id}', [AuctionController::class, 'update']);
         Route::delete('/my-auctions/delete/{id}', [AuctionController::class, 'destroy'])->name('my-auctions.delete');
+
+        // notifications
+        Route::post('/notifications/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::post('/notifications/mark-all-as-read',[NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
        });
 
         // admin routes

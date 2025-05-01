@@ -6,7 +6,9 @@ import { Link } from "@inertiajs/vue3";
 
 <template>
     <header>
+        <!-- <p>{{ $page.props.notifications }}</p> -->
         <nav class="bg-white shadow py-4">
+            <!-- <p>{{ $page.props.notification_count }}</p> -->
             <div
                 class="container mx-auto px-4 flex justify-between items-center"
             >
@@ -41,7 +43,7 @@ import { Link } from "@inertiajs/vue3";
 
                 <div class="flex items-center space-x-4">
                     <!-- Notification -->
-                    <Notification />
+                    <Notification :notifications="$page.props.notifications" />
                     <!-- User Dropdown -->
                     <div class="flex items-center space-x-4">
                         <UserDropdown />

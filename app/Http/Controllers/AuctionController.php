@@ -21,13 +21,22 @@ class AuctionController extends Controller
             'end_time' => 'required|date|after:start_time',
         ]);
 
+        if($validatedData['start_time'] < now()) {
+            $validatedData['status'] = 'ongoing';
+        }
+        else {
+            $validatedData['status'] = 'upcoming';
+        }
+
         $user = Auth::user();
 
         // Merge user_id into validated data
         $validatedData['user_id'] = $user->id;
 
+
         // Create a new auction
         Auction::create($validatedData);
+     
 
         return redirect()->back()->with('success', 'Bid placed successfully.');
     }

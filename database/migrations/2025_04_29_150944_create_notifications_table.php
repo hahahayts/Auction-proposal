@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('type');
             $table->string('message');
             $table->boolean('is_read')->default(false);
-        
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -29,11 +30,20 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+    
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $user,
             ],
+            'notifications' => $user
+                ? Notification::with('bid')->where('user_id', $user->id)->latest()->get()
+                : [],
+            'notification_count' => $user
+                ? Notification::where('user_id', $user->id)->where('is_read', false)->count()
+                : 0,
         ];
     }
+    
 }
