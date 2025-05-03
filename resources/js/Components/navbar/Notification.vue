@@ -16,6 +16,13 @@ const getTimeAgo = (timestamp) => {
     // This is a placeholder - you would implement actual time formatting
     return "5m ago"; // Example
 };
+
+const getNotificationCount = computed(() => {
+    const count = props.notifications.filter(
+        (notification) => notification.is_read !== false
+    );
+    return count.length > 9 ? "9+" : count.length;
+});
 </script>
 
 <template>
@@ -42,14 +49,10 @@ const getTimeAgo = (timestamp) => {
 
                 <!-- Animated Badge -->
                 <span
-                    v-if="$page.props.notification_count > 0"
+                    v-if="getNotificationCount > 0"
                     class="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full ring-2 ring-white animate-pulse"
                 >
-                    {{
-                        notifications.length > 9
-                            ? "9+"
-                            : $page.props.notification_count
-                    }}
+                    {{ getNotificationCount }}
                 </span>
             </button>
         </template>

@@ -183,7 +183,7 @@ const submit = () => {
                         <div class="relative mt-1">
                             <span
                                 class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500"
-                                >$</span
+                                >₱</span
                             >
                             <TextInput
                                 id="start_price"

@@ -40,9 +40,7 @@ class HandleInertiaRequests extends Middleware
             'notifications' => $user
                 ? Notification::with('bid')->where('user_id', $user->id)->latest()->get()
                 : [],
-            'notification_count' => $user
-                ? Notification::where('user_id', $user->id)->where('is_read', false)->count()
-                : 0,
+          
         ];
     }
     
